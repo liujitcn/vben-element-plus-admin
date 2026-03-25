@@ -18,11 +18,8 @@ import App from './app.vue';
 import { router } from './router';
 
 async function bootstrap(namespace: string) {
-  // 初始化组件适配器
-  await initComponentAdapter();
-
-  // 初始化表单组件
-  await initSetupVbenForm();
+  // 首屏必需初始化并行执行，减少登录页等待时间
+  await Promise.all([initComponentAdapter(), initSetupVbenForm()]);
 
   // // 设置弹窗的默认配置
   // setDefaultModalProps({
@@ -43,25 +40,21 @@ async function bootstrap(namespace: string) {
     spinning: 'spinning',
   });
 
-  // 国际化 i18n 配置
-  await setupI18n(app);
-
-  // 配置 pinia-tore
-  await initStores(app, { namespace });
+  // 国际化与状态管理并行初始化
+  await Promise.all([setupI18n(app), initStores(app, { namespace })]);
 
   // 安装权限指令
   registerAccessDirective(app);
 
-  // 初始化 tippy
-  const { initTippy } = await import('@vben/common-ui/es/tippy');
+  const [{ initTippy }, { MotionPlugin }] = await Promise.all([
+    import('@vben/common-ui/es/tippy'),
+    import('@vben/plugins/motion'),
+  ]);
   initTippy(app);
+  app.use(MotionPlugin);
 
   // 配置路由及路由守卫
   app.use(router);
-
-  // 配置Motion插件
-  const { MotionPlugin } = await import('@vben/plugins/motion');
-  app.use(MotionPlugin);
 
   // 动态更新标题
   watchEffect(() => {

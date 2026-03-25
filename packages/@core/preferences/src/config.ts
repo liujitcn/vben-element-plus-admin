@@ -2,7 +2,7 @@ import type { Preferences } from './types';
 
 const defaultPreferences: Preferences = {
   app: {
-    accessMode: 'frontend',
+    accessMode: 'backend',
     authPageLayout: 'panel-right',
     checkUpdatesInterval: 1,
     colorGrayMode: false,
@@ -17,12 +17,12 @@ const defaultPreferences: Preferences = {
     contentPaddingTop: 0,
     defaultAvatar:
       'https://unpkg.com/@vbenjs/static-source@0.1.7/source/avatar-v1.webp',
-    defaultHomePath: '/analytics',
+    defaultHomePath: '/dashboard',
     dynamicTitle: true,
     enableCheckUpdates: true,
     enableCopyPreferences: true,
     enablePreferences: true,
-    enableRefreshToken: false,
+    enableRefreshToken: true,
     enableStickyPreferencesNavigationBar: true,
     isMobile: false,
     layout: 'sidebar-nav',

@@ -11,6 +11,7 @@ import { VbenAvatar, VbenButton } from '@vben-core/shadcn-ui';
 
 interface Props {
   avatar?: string;
+  description?: string;
   text?: string;
 }
 
@@ -20,6 +21,7 @@ defineOptions({
 
 withDefaults(defineProps<Props>(), {
   avatar: '',
+  description: '',
   text: '',
 });
 
@@ -98,6 +100,12 @@ async function handleSubmit() {
           />
           <div class="my-6 flex items-center font-medium text-foreground">
             {{ text }}
+          </div>
+          <div
+            v-if="description"
+            class="-mt-4 mb-6 text-sm text-muted-foreground"
+          >
+            {{ description }}
           </div>
         </div>
         <Form />

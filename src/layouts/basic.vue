@@ -13,7 +13,7 @@ import { openWindow } from '@vben/utils';
 
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
-import LoginForm from '#/views/_core/authentication/login.vue';
+import LoginForm from '#/views/login/login.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -59,7 +59,19 @@ const menus = computed(() => [
 ]);
 
 const avatar = computed(() => {
-  return userStore.userInfo?.avatar ?? preferences.app.defaultAvatar;
+  return userStore.userInfo?.avatar || preferences.app.defaultAvatar;
+});
+
+const userText = computed(() => {
+  return userStore.userInfo?.realName || userStore.userInfo?.username || '';
+});
+
+const userDescription = computed(() => {
+  return userStore.userInfo?.deptName || '';
+});
+
+const userTagText = computed(() => {
+  return userStore.userInfo?.roleName || '';
 });
 
 async function handleLogout() {
@@ -92,10 +104,10 @@ watch(
     <template #user-dropdown>
       <UserDropdown
         :avatar
+        :description="userDescription"
         :menus
-        :text="userStore.userInfo?.realName"
-        description="ann.vben@gmail.com"
-        tag-text="Pro"
+        :tag-text="userTagText"
+        :text="userText"
         @logout="handleLogout"
       />
     </template>
@@ -108,7 +120,12 @@ watch(
       </AuthenticationLoginExpiredModal>
     </template>
     <template #lock-screen>
-      <LockScreen :avatar @to-login="handleLogout" />
+      <LockScreen
+        :avatar
+        :description="userDescription"
+        :text="userText"
+        @to-login="handleLogout"
+      />
     </template>
   </BasicLayout>
 </template>

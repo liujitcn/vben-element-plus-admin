@@ -1,7 +1,7 @@
 /**
  * 该文件可自行根据业务逻辑进行调整
  */
-import type { RequestClientOptions } from '@vben/request';
+import type { RequestClientConfig, RequestClientOptions } from '@vben/request';
 
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
@@ -17,7 +17,7 @@ import { ElMessage } from 'element-plus';
 
 import { useAuthStore } from '#/store';
 
-import { refreshTokenApi } from './core';
+import { defLoginService } from './base/login';
 
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
@@ -50,8 +50,11 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    */
   async function doRefreshToken() {
     const accessStore = useAccessStore();
-    const resp = await refreshTokenApi();
-    const newToken = resp.data;
+    const resp = await defLoginService.RefreshToken({
+      refreshToken: accessStore.refreshToken ?? '',
+    });
+    const newToken = resp.accessToken;
+    accessStore.setRefreshToken(resp.refreshToken);
     accessStore.setAccessToken(newToken);
     return newToken;
   }
@@ -75,8 +78,11 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   client.addResponseInterceptor(
     defaultResponseInterceptor({
       codeField: 'code',
-      dataField: 'data',
-      successCode: 0,
+      dataField: (responseData: Record<string, any>) =>
+        Object.prototype.hasOwnProperty.call(responseData, 'data')
+          ? responseData.data
+          : responseData,
+      successCode: (code: unknown) => code === undefined || code === 0,
     }),
   );
 
@@ -95,7 +101,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   client.addResponseInterceptor(
     errorMessageResponseInterceptor((msg: string, error) => {
       // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 message.error 提示 msg
-      // 当前mock接口返回的错误字段是 error 或者 message
+      // 优先使用服务端返回的 error 或 message 字段
       const responseData = error?.response?.data ?? {};
       const errorMessage = responseData?.error ?? responseData?.message ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
@@ -111,3 +117,12 @@ export const requestClient = createRequestClient(apiURL, {
 });
 
 export const baseRequestClient = new RequestClient({ baseURL: apiURL });
+
+type ServiceRequestConfig = RequestClientConfig & {
+  url: string;
+};
+
+export default function service<R = any>(config: ServiceRequestConfig) {
+  const { url, ...requestConfig } = config;
+  return requestClient.request<R>(url, requestConfig);
+}

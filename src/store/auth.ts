@@ -10,8 +10,12 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { ElNotification } from 'element-plus';
 import { defineStore } from 'pinia';
 
-import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
+import { getUserInfoApi, loginApi, logoutApi } from '#/api';
 import { $t } from '#/locales';
+
+type AppUserInfo = UserInfo & {
+  permissions?: string[];
+};
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
@@ -20,36 +24,23 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false);
 
-  /**
-   * 异步处理登录操作
-   * Asynchronously handle the login process
-   * @param params 登录表单数据
-   */
   async function authLogin(
     params: Recordable<any>,
     onSuccess?: () => Promise<void> | void,
   ) {
-    // 异步处理用户登录操作并获取 accessToken
-    let userInfo: null | UserInfo = null;
+    let userInfo: AppUserInfo | null = null;
     try {
       loginLoading.value = true;
-      const { accessToken } = await loginApi(params);
+      const { accessToken, refreshToken } = await loginApi(params);
 
-      // 如果成功获取到 accessToken
       if (accessToken) {
-        // 将 accessToken 存储到 accessStore 中
         accessStore.setAccessToken(accessToken);
+        accessStore.setRefreshToken(refreshToken ?? null);
 
-        // 获取用户信息并存储到 accessStore 中
-        const [fetchUserInfoResult, accessCodes] = await Promise.all([
-          fetchUserInfo(),
-          getAccessCodesApi(),
-        ]);
-
-        userInfo = fetchUserInfoResult;
+        userInfo = await fetchUserInfo();
 
         userStore.setUserInfo(userInfo);
-        accessStore.setAccessCodes(accessCodes);
+        accessStore.setAccessCodes(userInfo.permissions ?? []);
 
         if (accessStore.loginExpired) {
           accessStore.setLoginExpired(false);
@@ -61,9 +52,9 @@ export const useAuthStore = defineStore('auth', () => {
               );
         }
 
-        if (userInfo?.realName) {
+        if (userInfo.realName) {
           ElNotification({
-            message: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+            message: `${$t('authentication.loginSuccessDesc')}:${userInfo.realName}`,
             title: $t('authentication.loginSuccess'),
             type: 'success',
           });
@@ -82,12 +73,11 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await logoutApi();
     } catch {
-      // 不做任何处理
+      // ignore logout errors
     }
     resetAllStores();
     accessStore.setLoginExpired(false);
 
-    // 回登录页带上当前路由地址
     await router.replace({
       path: LOGIN_PATH,
       query: redirect

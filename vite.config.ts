@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { fileURLToPath, URL } from 'node:url';
 
 import tailwindcss from '@tailwindcss/vite';
@@ -7,7 +6,6 @@ import ElementPlus from 'unplugin-element-plus/vite';
 import { defineConfig, loadEnv } from 'vite';
 import { lazyImport, VxeResolver } from 'vite-plugin-lazy-import';
 
-import { viteNitroMockPlugin } from './build/plugins/nitro-mock';
 import { viteTailwindReferencePlugin } from './build/plugins/tailwind-reference';
 
 const resolvePath = (value: string) =>
@@ -27,11 +25,8 @@ function shouldInjectGlobalScss(filepath: string) {
   );
 }
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const isBuild = command === 'build';
-  const enableNitroMock =
-    !isBuild && (env.VITE_NITRO_MOCK ?? 'true').toLowerCase() !== 'false';
   const port = Number(env.VITE_PORT || 5777);
 
   return {
@@ -67,14 +62,13 @@ export default defineConfig(({ command, mode }) => {
       ElementPlus({
         format: 'esm',
       }),
-      enableNitroMock &&
-        viteNitroMockPlugin({
-          port: 5320,
-          rootDir: resolvePath('./mock'),
-        }),
     ].filter(Boolean),
     resolve: {
       alias: [
+        {
+          find: /^@\//,
+          replacement: `${resolvePath('./src')}/`,
+        },
         {
           find: /^#\//,
           replacement: `${resolvePath('./src')}/`,
@@ -217,8 +211,12 @@ export default defineConfig(({ command, mode }) => {
       proxy: {
         '/api': {
           changeOrigin: true,
-          rewrite: (urlPath) => urlPath.replace(/^\/api/, ''),
-          target: 'http://localhost:5320/api',
+          target: 'http://localhost:7001',
+          ws: true,
+        },
+        '/shop': {
+          changeOrigin: true,
+          target: 'http://localhost:7001',
           ws: true,
         },
       },

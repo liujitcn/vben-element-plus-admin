@@ -13,6 +13,8 @@ import { useDateFormat, useNow } from '@vueuse/core';
 
 interface Props {
   avatar?: string;
+  description?: string;
+  text?: string;
 }
 
 defineOptions({
@@ -21,6 +23,8 @@ defineOptions({
 
 withDefaults(defineProps<Props>(), {
   avatar: '',
+  description: '',
+  text: '',
 });
 
 defineEmits<{ toLogin: [] }>();
@@ -130,6 +134,15 @@ useScrollLock();
       >
         <div class="mb-10 flex-col-center w-[90%] max-w-75 px-4">
           <VbenAvatar :src="avatar" class="enter-x mb-6 size-20" />
+          <div v-if="text" class="enter-x mb-1 text-xl font-semibold text-foreground">
+            {{ text }}
+          </div>
+          <div
+            v-if="description"
+            class="enter-x mb-5 text-sm text-muted-foreground"
+          >
+            {{ description }}
+          </div>
           <div class="enter-x mb-2 w-full items-center">
             <Form />
           </div>

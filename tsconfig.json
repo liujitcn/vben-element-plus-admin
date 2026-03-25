@@ -35,6 +35,7 @@
     "baseUrl": ".",
     "types": ["vite/client"],
     "paths": {
+      "@/*": ["./src/*"],
       "#/*": ["./src/*"],
       "@vben/access": ["./packages/effects/access/src/index.ts"],
       "@vben/common-ui": ["./packages/effects/common-ui/src/index.ts"],
