@@ -14,7 +14,7 @@ defineOptions({ name: 'HomePage' });
     <div class="home-page__cards">
       <div class="home-page__card">
         <h2>登录方式</h2>
-        <p>仅保留账号密码登录，已去掉验证码、短信、二维码和第三方登录。</p>
+        <p>仅保留账号密码加验证码登录，已去掉短信、扫码、第三方和其它辅助入口。</p>
       </div>
       <div class="home-page__card">
         <h2>运行形态</h2>
