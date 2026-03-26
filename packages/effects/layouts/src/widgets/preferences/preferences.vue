@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 
 import { Settings } from '@vben/icons';
-import { $t, loadLocaleMessages } from '@vben/locales';
 import { preferences, updatePreferences } from '@vben/preferences';
 import { capitalizeFirstLetter } from '@vben/utils';
 
@@ -42,9 +41,6 @@ const listen = computed(() => {
           val: any,
         ) => {
           updatePreferences({ [key]: { [subKey]: val } });
-          if (key === 'app' && subKey === 'locale') {
-            loadLocaleMessages(val);
-          }
         };
       }
     } else {
@@ -61,7 +57,7 @@ const listen = computed(() => {
     <div @click="() => drawerApi.open()">
       <slot>
         <VbenButton
-          :title="$t('preferences.title')"
+          title="偏好设置"
           class="flex-col-center size-10 cursor-pointer rounded-l-lg rounded-r-none border-none bg-primary"
         >
           <Settings class="size-5" />

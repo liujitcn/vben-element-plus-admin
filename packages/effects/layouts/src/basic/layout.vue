@@ -6,8 +6,6 @@ import type { MenuRecordRaw } from '@vben/types';
 
 import { computed, onMounted, useSlots, watch } from 'vue';
 import { useRoute } from 'vue-router';
-
-import { $t } from '@vben/locales';
 import { preferences, updatePreferences, usePreferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep, mapTree } from '@vben/utils';
@@ -130,10 +128,10 @@ const {
 function wrapperMenus(menus: MenuRecordRaw[], deep: boolean = true) {
   return deep
     ? mapTree(menus, (item) => {
-        return { ...cloneDeep(item), name: $t(item.name) };
+        return { ...cloneDeep(item), name: String(item.name ?? '') };
       })
     : menus.map((item) => {
-        return { ...cloneDeep(item), name: $t(item.name) };
+        return { ...cloneDeep(item), name: String(item.name ?? '') };
       });
 }
 

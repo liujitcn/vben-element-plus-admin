@@ -19,6 +19,8 @@ import { useAuthStore } from '#/store';
 
 import { defLoginService } from './base/login';
 
+const AUTH_EXPIRED_CODES = new Set([300, 304, 305, 306, 307, 401]);
+
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
 function createRequestClient(baseURL: string, options?: RequestClientOptions) {
@@ -63,6 +65,12 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     return token ? `Bearer ${token}` : null;
   }
 
+  function isAuthExpired(error: any) {
+    const status = error?.response?.status;
+    const code = error?.response?.data?.code;
+    return status !== 401 && AUTH_EXPIRED_CODES.has(Number(code));
+  }
+
   // 请求头处理
   client.addRequestInterceptor({
     fulfilled: async (config) => {
@@ -85,6 +93,17 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       successCode: (code: unknown) => code === undefined || code === 0,
     }),
   );
+
+  client.addResponseInterceptor({
+    rejected: async (error) => {
+      if (!isAuthExpired(error)) {
+        throw error;
+      }
+
+      await doReAuthenticate();
+      throw error;
+    },
+  });
 
   // token过期的处理
   client.addResponseInterceptor(

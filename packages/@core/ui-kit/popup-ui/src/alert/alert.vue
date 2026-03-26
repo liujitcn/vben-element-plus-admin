@@ -159,7 +159,7 @@ async function handleOpenChange(val: boolean) {
         <AlertDialogTitle v-if="title">
           <div class="flex items-center">
             <component :is="getIconRender" class="mr-2" />
-            <span class="flex-auto">{{ $t(title) }}</span>
+            <span class="flex-auto">{{ title }}</span>
             <AlertDialogCancel v-if="showCancel" as-child>
               <VbenButton
                 variant="ghost"
@@ -191,7 +191,7 @@ async function handleOpenChange(val: boolean) {
               variant="ghost"
               @click="handleCancel"
             >
-              {{ cancelText || $t('cancel') }}
+              {{ cancelText || "取消" }}
             </component>
           </AlertDialogCancel>
           <AlertDialogAction as-child>
@@ -200,7 +200,7 @@ async function handleOpenChange(val: boolean) {
               :loading="loading"
               @click="handleConfirm"
             >
-              {{ confirmText || $t('confirm') }}
+              {{ confirmText || "确认" }}
             </component>
           </AlertDialogAction>
         </div>

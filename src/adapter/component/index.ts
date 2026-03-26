@@ -11,7 +11,6 @@ import type { Recordable } from '@vben/types';
 import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
 
 import { ApiComponent, globalShareState, IconPicker } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
 import { ElNotification } from 'element-plus';
 
@@ -127,10 +126,14 @@ const withDefaultPlaceholder = <T extends Component>(
     name: component.name,
     inheritAttrs: false,
     setup: (props: any, { attrs, expose, slots }) => {
+      const placeholderMap = {
+        input: '请输入',
+        select: '请选择',
+      } as const;
       const placeholder =
         props?.placeholder ||
         attrs?.placeholder ||
-        $t(`ui.placeholder.${type}`);
+        placeholderMap[type];
       // 透传组件暴露的方法
       const innerRef = ref();
       expose(

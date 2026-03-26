@@ -349,7 +349,7 @@ function handleClosed() {
             @click="() => modalApi?.onCancel()"
           >
             <slot name="cancelText">
-              {{ cancelText || $t('cancel') }}
+              {{ cancelText || "取消" }}
             </slot>
           </component>
           <slot name="center-footer"></slot>
@@ -361,7 +361,7 @@ function handleClosed() {
             @click="() => modalApi?.onConfirm()"
           >
             <slot name="confirmText">
-              {{ confirmText || $t('confirm') }}
+              {{ confirmText || "确认" }}
             </slot>
           </component>
         </slot>

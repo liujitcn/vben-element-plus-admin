@@ -10,8 +10,6 @@ import '@vben/styles/ele';
 import { useTitle } from '@vueuse/core';
 import { ElLoading } from 'element-plus';
 
-import { $t, setupI18n } from '#/locales';
-
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
 import App from './app.vue';
@@ -40,8 +38,7 @@ async function bootstrap(namespace: string) {
     spinning: 'spinning',
   });
 
-  // 国际化与状态管理并行初始化
-  await Promise.all([setupI18n(app), initStores(app, { namespace })]);
+  await initStores(app, { namespace });
 
   // 安装权限指令
   registerAccessDirective(app);
@@ -61,7 +58,7 @@ async function bootstrap(namespace: string) {
     if (preferences.app.dynamicTitle) {
       const routeTitle = router.currentRoute.value.meta?.title;
       const pageTitle =
-        (routeTitle ? `${$t(routeTitle)} - ` : '') + preferences.app.name;
+        (routeTitle ? `${String(routeTitle)} - ` : '') + preferences.app.name;
       useTitle(pageTitle);
     }
   });

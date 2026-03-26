@@ -179,7 +179,7 @@ defineExpose({
       v-if="rootProps.showCollapseButton"
       v-model:model-value="collapsed"
     >
-      <span>{{ collapsed ? $t('expand') : $t('collapse') }}</span>
+      <span>{{ collapsed ? "展开" : "收起" }}</span>
     </VbenExpandableArrow>
 
     <!-- 展开按钮后 -->

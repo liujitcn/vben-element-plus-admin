@@ -1,7 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { $t } from '#/locales';
-
 const routes: RouteRecordRaw[] = [
   {
     component: () => import('#/views/dashboard/index.vue'),
@@ -9,7 +7,7 @@ const routes: RouteRecordRaw[] = [
       affixTab: true,
       icon: 'lucide:layout-dashboard',
       order: -1,
-      title: $t('page.dashboard.title'),
+      title: "概览",
     },
     name: 'Dashboard',
     path: '/dashboard',

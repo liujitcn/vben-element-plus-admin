@@ -311,7 +311,7 @@ const getForceMount = computed(() => {
             @click="() => drawerApi?.onCancel()"
           >
             <slot name="cancelText">
-              {{ cancelText || $t('cancel') }}
+              {{ cancelText || "取消" }}
             </slot>
           </component>
           <slot name="center-footer"></slot>
@@ -322,7 +322,7 @@ const getForceMount = computed(() => {
             @click="() => drawerApi?.onConfirm()"
           >
             <slot name="confirmText">
-              {{ confirmText || $t('confirm') }}
+              {{ confirmText || "确认" }}
             </slot>
           </component>
         </slot>

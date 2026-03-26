@@ -7,7 +7,6 @@ import type { AuthenticationProps } from './types';
 
 import { computed, reactive } from 'vue';
 
-import { $t } from '@vben/locales';
 
 import { useVbenForm } from '@vben-core/form-ui';
 import { VbenButton } from '@vben-core/shadcn-ui';
@@ -69,12 +68,12 @@ defineExpose({
     <slot name="title">
       <Title>
         <slot name="title">
-          {{ title || `${$t('authentication.welcomeBack')} 👋🏻` }}
+          {{ title || `${"欢迎回来"} 👋🏻` }}
         </slot>
         <template #desc>
           <span class="text-muted-foreground">
             <slot name="subTitle">
-              {{ subTitle || $t('authentication.loginSubtitle') }}
+              {{ subTitle || "请输入您的帐户信息以开始管理您的项目" }}
             </slot>
           </span>
         </template>
@@ -91,7 +90,7 @@ defineExpose({
       class="w-full"
       @click="handleSubmit"
     >
-      {{ submitButtonText || $t('common.login') }}
+      {{ submitButtonText || "登录" }}
     </VbenButton>
   </div>
 </template>

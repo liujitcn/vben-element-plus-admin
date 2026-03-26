@@ -11,7 +11,6 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
-import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/login/login.vue';
 
@@ -27,7 +26,7 @@ const menus = computed(() => [
       router.push({ name: 'Profile' });
     },
     icon: 'lucide:user',
-    text: $t('page.auth.profile'),
+    text: "个人中心",
   },
   {
     handler: () => {
@@ -36,7 +35,7 @@ const menus = computed(() => [
       });
     },
     icon: BookOpenText,
-    text: $t('ui.widgets.document'),
+    text: "文档",
   },
   {
     handler: () => {
@@ -54,7 +53,7 @@ const menus = computed(() => [
       });
     },
     icon: CircleHelp,
-    text: $t('ui.widgets.qa'),
+    text: "问题 & 帮助",
   },
 ]);
 

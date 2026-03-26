@@ -4,7 +4,6 @@ import type { VbenFormSchema } from '@vben/common-ui';
 import { computed, markRaw, useTemplateRef, ref } from 'vue';
 
 import { AuthenticationLogin, z } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
 import { useAuthStore } from '#/store';
 import TextCaptcha from './text-captcha.vue';
@@ -21,20 +20,20 @@ const formSchema = computed((): VbenFormSchema[] => {
     {
       component: 'VbenInput',
       componentProps: {
-        placeholder: $t('authentication.usernameTip'),
+        placeholder: "请输入用户名",
       },
       fieldName: 'userName',
-      label: $t('authentication.username'),
-      rules: z.string().min(1, { message: $t('authentication.usernameTip') }),
+      label: "账号",
+      rules: z.string().min(1, { message: "请输入用户名" }),
     },
     {
       component: 'VbenInputPassword',
       componentProps: {
-        placeholder: $t('authentication.password'),
+        placeholder: "密码",
       },
       fieldName: 'password',
-      label: $t('authentication.password'),
-      rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
+      label: "密码",
+      rules: z.string().min(1, { message: "请输入密码" }),
     },
     {
       component: markRaw(TextCaptcha),
@@ -42,10 +41,10 @@ const formSchema = computed((): VbenFormSchema[] => {
         onCaptchaIdChange: (value: string) => {
           captchaId.value = value;
         },
-        placeholder: $t('authentication.code'),
+        placeholder: "验证码",
       },
       fieldName: 'captchaCode',
-      rules: z.string().length(6, { message: $t('authentication.codeTip', [6]) }),
+      rules: z.string().length(6, { message: `请输入${6}位验证码` }),
     },
   ];
 });

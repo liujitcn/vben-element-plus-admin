@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { $t } from '@vben/locales';
 
 import SwitchItem from '../switch-item.vue';
 
@@ -17,21 +16,21 @@ const widgetRefresh = defineModel<boolean>('widgetRefresh');
 
 <template>
   <SwitchItem v-model="widgetGlobalSearch">
-    {{ $t('preferences.widget.globalSearch') }}
+    {{ "启用全局搜索" }}
   </SwitchItem>
   <SwitchItem v-model="widgetThemeToggle">
-    {{ $t('preferences.widget.themeToggle') }}
+    {{ "启用主题切换" }}
   </SwitchItem>
   <SwitchItem v-model="widgetFullscreen">
-    {{ $t('preferences.widget.fullscreen') }}
+    {{ "启用全屏" }}
   </SwitchItem>
   <SwitchItem v-model="widgetLockScreen">
-    {{ $t('preferences.widget.lockScreen') }}
+    {{ "启用锁屏" }}
   </SwitchItem>
   <SwitchItem v-model="widgetSidebarToggle">
-    {{ $t('preferences.widget.sidebarToggle') }}
+    {{ "启用侧边栏切换" }}
   </SwitchItem>
   <SwitchItem v-model="widgetRefresh">
-    {{ $t('preferences.widget.refresh') }}
+    {{ "启用刷新" }}
   </SwitchItem>
 </template>
