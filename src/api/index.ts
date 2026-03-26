@@ -187,7 +187,7 @@ function mapUserInfo(data: {
     avatar: normalizeAssetUrl(data.avatar) || preferences.app.defaultAvatar,
     deptName: data.deptName || '',
     desc: data.phone || data.userName || '',
-    homePath: preferences.app.defaultHomePath,
+    homePath: '/dashboard/workspace',
     permissions: data.permission ?? [],
     realName: data.nickName || data.userName,
     roles: data.roleCode ? [data.roleCode] : [],

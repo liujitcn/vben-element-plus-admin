@@ -2,6 +2,7 @@ import type { Component } from 'vue';
 
 interface AnalysisOverviewItem {
   icon: Component | string;
+  iconClass?: string;
   title: string;
   totalTitle: string;
   totalValue: number;

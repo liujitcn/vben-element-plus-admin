@@ -39,7 +39,7 @@ withDefaults(defineProps<Props>(), {
             class="text-xl"
             prefix=""
           />
-          <VbenIcon :icon="item.icon" class="size-8 shrink-0" />
+          <VbenIcon :icon="item.icon" :class="['size-8 shrink-0', item.iconClass]" />
         </CardContent>
         <CardFooter class="justify-between">
           <span>{{ item.totalTitle }}</span>
